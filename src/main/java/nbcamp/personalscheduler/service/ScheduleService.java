@@ -14,4 +14,8 @@ public class ScheduleService {
     public Schedule save(Schedule schedule) {
         return repository.save(schedule);
     }
+
+    public Schedule findById(Long scheduleId) {
+        return repository.findById(scheduleId);
+    }
 }

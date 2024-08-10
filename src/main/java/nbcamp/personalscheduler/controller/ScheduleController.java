@@ -5,10 +5,7 @@ import nbcamp.personalscheduler.dto.ScheduleRequestDto;
 import nbcamp.personalscheduler.dto.ScheduleResponseDto;
 import nbcamp.personalscheduler.entity.Schedule;
 import nbcamp.personalscheduler.service.ScheduleService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
@@ -24,5 +21,11 @@ public class ScheduleController {
 
         Schedule savedSchedule = scheduleService.save(schedule);
         return new ScheduleResponseDto(savedSchedule);
+    }
+
+    @GetMapping("/schedule/{scheduleId}")
+    public ScheduleResponseDto getSchedule(@PathVariable Long scheduleId) {
+        Schedule findSchedule = scheduleService.findById(scheduleId);
+        return new ScheduleResponseDto(findSchedule);
     }
 }
