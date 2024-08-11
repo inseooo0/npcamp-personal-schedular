@@ -25,17 +25,8 @@ public class ScheduleService {
         return repository.findById(scheduleId);
     }
 
-    public List<Schedule> findList(LocalDate updateDate, Long managerId) {
-        List<Schedule> scheduleList;
-        if (updateDate != null && managerId != null) {
-            scheduleList = repository.findListV0(updateDate, managerId);
-        } else if (updateDate != null) {
-            scheduleList = repository.findListV1(updateDate);
-        } else if (managerId != null) {
-            scheduleList = repository.findListV2(managerId);
-        } else {
-            scheduleList = repository.findListV3();
-        }
+    public List<Schedule> findList(LocalDate updateDate, Long managerId, int pageNum, int pageSize) {
+        List<Schedule> scheduleList = repository.findList(updateDate, managerId, pageNum, pageSize);
 
         for (Schedule schedule : scheduleList) {
             Long id = schedule.getManager().getId();

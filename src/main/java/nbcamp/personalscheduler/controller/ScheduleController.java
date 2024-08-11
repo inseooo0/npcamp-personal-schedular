@@ -77,13 +77,15 @@ public class ScheduleController {
 
     @GetMapping("/schedule")
     public ResponseEntity<List<Map<String, Object>>> getScheduleList(@RequestParam(required = false) String updateDate,
-                                                     @RequestParam(required = false) Long managerId) {
+                                                                     @RequestParam(required = false) Long managerId,
+                                                                     @RequestParam int pageNum,
+                                                                     @RequestParam int pageSize) {
         LocalDate date = null;
         if (updateDate != null) {
             date = LocalDate.parse(updateDate, DateTimeFormatter.ISO_DATE);
         }
 
-        List<Schedule> scheduleList = scheduleService.findList(date, managerId);
+        List<Schedule> scheduleList = scheduleService.findList(date, managerId, pageNum, pageSize);
         List<Map<String, Object>> responseData = new ArrayList<>();
         for (Schedule schedule : scheduleList) {
             Map<String, Object> responseMap = new HashMap<>();
