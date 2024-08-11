@@ -50,4 +50,11 @@ public class ScheduleController {
         Schedule updateSchedule = new Schedule(requestDto.getContent(), requestDto.getName(), requestDto.getPassword());
         return new ScheduleResponseDto(scheduleService.update(scheduleId, updateSchedule));
     }
+
+    @DeleteMapping("/schedule/{scheduleId}")
+    public String deleteSchedule(@PathVariable Long scheduleId, @RequestBody ScheduleRequestDto requestDto) {
+        String password = requestDto.getPassword();
+        scheduleService.removeById(scheduleId, password);
+        return "ok";
+    }
 }

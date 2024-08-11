@@ -46,4 +46,16 @@ public class ScheduleService {
 
         return repository.update(scheduleId, updateSchedule);
     }
+
+    public void removeById(Long scheduleId, String password) {
+        Schedule schedule = findById(scheduleId);
+
+        if (schedule == null) {
+            throw new IllegalArgumentException("해당 ID를 가진 일정은 존재하지 않습니다.");
+        } else if (!schedule.getPassword().equals(password)) {
+            throw new IllegalArgumentException("일정의 비밀번호가 일치하지 않습니다.");
+        }
+
+        repository.removeById(scheduleId);
+    }
 }

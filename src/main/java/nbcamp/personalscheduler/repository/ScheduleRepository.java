@@ -117,4 +117,9 @@ public class ScheduleRepository {
         return findById(scheduleId);
     }
 
+    public void removeById(Long scheduleId) {
+        String sql = "delete from schedule where id = ?";
+        jdbcTemplate.update(sql, scheduleId);
+    }
+
 }
