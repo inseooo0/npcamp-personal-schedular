@@ -3,12 +3,15 @@ package nbcamp.personalscheduler.repository;
 import lombok.RequiredArgsConstructor;
 import nbcamp.personalscheduler.entity.Schedule;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.PreparedStatement;
-import java.sql.Statement;
+import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
@@ -51,4 +54,61 @@ public class ScheduleRepository {
             }
         }, id);
     }
+
+    public List<Schedule> findListV0(LocalDate updateDate, String name) {
+        String sql = "select * from schedule where date(update_at) = ? and name = ?";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            Long id = rs.getLong("id");
+            String content = rs.getString("content");
+            String name1 = rs.getString("name");
+            String password = rs.getString("password");
+            LocalDateTime createAt = rs.getTimestamp("create_at").toLocalDateTime();
+            LocalDateTime updateAt = rs.getTimestamp("update_at").toLocalDateTime();
+            return new Schedule(id, content, name1, password, createAt, updateAt);
+        }, Date.valueOf(updateDate), name);
+    }
+
+    public List<Schedule> findListV1(LocalDate updateDate) {
+        String sql = "select * from schedule where date(update_at) = ? order by update_at desc";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            Long id = rs.getLong("id");
+            String content = rs.getString("content");
+            String name1 = rs.getString("name");
+            String password = rs.getString("password");
+            LocalDateTime createAt = rs.getTimestamp("create_at").toLocalDateTime();
+            LocalDateTime updateAt = rs.getTimestamp("update_at").toLocalDateTime();
+            return new Schedule(id, content, name1, password, createAt, updateAt);
+        }, Date.valueOf(updateDate));
+    }
+
+    public List<Schedule> findListV2(String name) {
+        String sql = "select * from schedule where name = ? order by update_at desc";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            Long id = rs.getLong("id");
+            String content = rs.getString("content");
+            String name1 = rs.getString("name");
+            String password = rs.getString("password");
+            LocalDateTime createAt = rs.getTimestamp("create_at").toLocalDateTime();
+            LocalDateTime updateAt = rs.getTimestamp("update_at").toLocalDateTime();
+            return new Schedule(id, content, name1, password, createAt, updateAt);
+        }, name);
+    }
+
+    public List<Schedule> findListV3() {
+        String sql = "select * from schedule order by update_at desc";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            Long id = rs.getLong("id");
+            String content = rs.getString("content");
+            String name1 = rs.getString("name");
+            String password = rs.getString("password");
+            LocalDateTime createAt = rs.getTimestamp("create_at").toLocalDateTime();
+            LocalDateTime updateAt = rs.getTimestamp("update_at").toLocalDateTime();
+            return new Schedule(id, content, name1, password, createAt, updateAt);
+        });
+    }
+
 }
