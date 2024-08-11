@@ -1,6 +1,7 @@
 package nbcamp.personalscheduler.service;
 
 import lombok.RequiredArgsConstructor;
+import nbcamp.personalscheduler.entity.Manager;
 import nbcamp.personalscheduler.entity.Schedule;
 import nbcamp.personalscheduler.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.Objects;
 public class ScheduleService {
 
     private final ScheduleRepository repository;
+    private final ManagerService managerService;
 
     public Schedule save(Schedule schedule) {
         return repository.save(schedule);
@@ -23,16 +25,24 @@ public class ScheduleService {
         return repository.findById(scheduleId);
     }
 
-    public List<Schedule> findList(LocalDate updateDate, String name) {
-        if (updateDate != null && name != null) {
-            return repository.findListV0(updateDate, name);
+    public List<Schedule> findList(LocalDate updateDate, Long managerId) {
+        List<Schedule> scheduleList;
+        if (updateDate != null && managerId != null) {
+            scheduleList = repository.findListV0(updateDate, managerId);
         } else if (updateDate != null) {
-            return repository.findListV1(updateDate);
-        } else if (name != null) {
-            return repository.findListV2(name);
+            scheduleList = repository.findListV1(updateDate);
+        } else if (managerId != null) {
+            scheduleList = repository.findListV2(managerId);
         } else {
-            return repository.findListV3();
+            scheduleList = repository.findListV3();
         }
+
+        for (Schedule schedule : scheduleList) {
+            Long id = schedule.getManager().getId();
+            schedule.setManager(managerService.findById(id));
+        }
+
+        return scheduleList;
     }
 
     public Schedule update(Long scheduleId, Schedule updateSchedule) {

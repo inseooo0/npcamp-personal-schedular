@@ -10,6 +10,6 @@ import lombok.Setter;
 public class ScheduleRequestDto {
     private String content;
     private String name;
+    private String email;
     private String password;
-
 }

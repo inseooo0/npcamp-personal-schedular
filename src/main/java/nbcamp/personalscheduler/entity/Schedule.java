@@ -13,21 +13,21 @@ public class Schedule {
 
     private Long id;
     private String content;
-    private String name;
+    private Manager manager;
     private String password;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
 
-    public Schedule(String content, String name, String password) {
+    public Schedule(String content, Manager manager, String password) {
         this.content = content;
-        this.name = name;
+        this.manager = manager;
         this.password = password;
     }
 
-    public Schedule(Long id, String content, String name, String password, LocalDateTime createAt, LocalDateTime updateAt) {
+    public Schedule(Long id, String content, Manager manager, String password, LocalDateTime createAt, LocalDateTime updateAt) {
         this.id = id;
         this.content = content;
-        this.name = name;
+        this.manager = manager;
         this.password = password;
         this.createAt = createAt;
         this.updateAt = updateAt;
