@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -32,5 +33,17 @@ public class ScheduleService {
         } else {
             return repository.findListV3();
         }
+    }
+
+    public Schedule update(Long scheduleId, Schedule updateSchedule) {
+        Schedule schedule = findById(scheduleId);
+
+        if (schedule == null) {
+            throw new IllegalArgumentException("해당 ID를 가진 일정은 존재하지 않습니다.");
+        } else if (!schedule.getPassword().equals(updateSchedule.getPassword())) {
+            throw new IllegalArgumentException("일정의 비밀번호가 일치하지 않습니다.");
+        }
+
+        return repository.update(scheduleId, updateSchedule);
     }
 }

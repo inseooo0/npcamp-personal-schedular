@@ -33,7 +33,6 @@ public class ScheduleRepository {
 
         Long id = keyHolder.getKey().longValue();
         return findById(id);
-
     }
 
     public Schedule findById(Long id) {
@@ -109,6 +108,13 @@ public class ScheduleRepository {
             LocalDateTime updateAt = rs.getTimestamp("update_at").toLocalDateTime();
             return new Schedule(id, content, name1, password, createAt, updateAt);
         });
+    }
+
+    public Schedule update(Long scheduleId, Schedule schedule) {
+        String sql = "update schedule set content = ?, name = ? where id = ?";
+
+        jdbcTemplate.update(sql, schedule.getContent(), schedule.getName(), scheduleId);
+        return findById(scheduleId);
     }
 
 }

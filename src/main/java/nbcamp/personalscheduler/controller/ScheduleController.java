@@ -44,4 +44,10 @@ public class ScheduleController {
         List<Schedule> scheduleList = scheduleService.findList(date, name);
         return scheduleList.stream().map(ScheduleResponseDto::new).toList();
     }
+
+    @PutMapping("/schedule/{scheduleId}")
+    public ScheduleResponseDto updateSchedule(@PathVariable Long scheduleId, @RequestBody ScheduleRequestDto requestDto) {
+        Schedule updateSchedule = new Schedule(requestDto.getContent(), requestDto.getName(), requestDto.getPassword());
+        return new ScheduleResponseDto(scheduleService.update(scheduleId, updateSchedule));
+    }
 }
