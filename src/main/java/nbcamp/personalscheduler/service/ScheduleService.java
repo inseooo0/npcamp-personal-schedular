@@ -3,6 +3,8 @@ package nbcamp.personalscheduler.service;
 import lombok.RequiredArgsConstructor;
 import nbcamp.personalscheduler.entity.Manager;
 import nbcamp.personalscheduler.entity.Schedule;
+import nbcamp.personalscheduler.exception.ApiException;
+import nbcamp.personalscheduler.exception.CommonErrorCode;
 import nbcamp.personalscheduler.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +24,9 @@ public class ScheduleService {
     }
 
     public Schedule findById(Long scheduleId) {
-        return repository.findById(scheduleId);
+        Schedule schedule = repository.findById(scheduleId);
+        if (schedule == null) throw new ApiException(CommonErrorCode.INVALID_PARAMETER);
+        return schedule;
     }
 
     public List<Schedule> findList(LocalDate updateDate, Long managerId, int pageNum, int pageSize) {
@@ -40,9 +44,9 @@ public class ScheduleService {
         Schedule schedule = findById(scheduleId);
 
         if (schedule == null) {
-            throw new IllegalArgumentException("해당 ID를 가진 일정은 존재하지 않습니다.");
+            throw new ApiException(CommonErrorCode.INVALID_PARAMETER);
         } else if (!schedule.getPassword().equals(updateSchedule.getPassword())) {
-            throw new IllegalArgumentException("일정의 비밀번호가 일치하지 않습니다.");
+            throw new ApiException(CommonErrorCode.INVALID_PARAMETER);
         }
 
         return repository.update(scheduleId, updateSchedule);
@@ -52,9 +56,9 @@ public class ScheduleService {
         Schedule schedule = findById(scheduleId);
 
         if (schedule == null) {
-            throw new IllegalArgumentException("해당 ID를 가진 일정은 존재하지 않습니다.");
+            throw new ApiException(CommonErrorCode.INVALID_PARAMETER);
         } else if (!schedule.getPassword().equals(password)) {
-            throw new IllegalArgumentException("일정의 비밀번호가 일치하지 않습니다.");
+            throw new ApiException(CommonErrorCode.INVALID_PARAMETER);
         }
 
         repository.removeById(scheduleId);

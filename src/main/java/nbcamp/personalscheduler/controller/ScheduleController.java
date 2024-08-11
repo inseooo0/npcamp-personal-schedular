@@ -45,15 +45,12 @@ public class ScheduleController {
 
         // schedule db 저장
         Schedule savedSchedule = scheduleService.save(schedule);
-        savedSchedule.setManager(savedManager);
 
         // response dto 생성
-        ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(savedSchedule);
-        ManagerResponseDto managerResponseDto = new ManagerResponseDto(savedManager);
 
         Map<String, Object> responseData = new HashMap<>();
-        responseData.put("schedule", scheduleResponseDto);
-        responseData.put("manager", managerResponseDto);
+        responseData.put("schedule", new ScheduleResponseDto(savedSchedule));
+        responseData.put("manager", new ManagerResponseDto(savedManager));
 
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
@@ -62,15 +59,10 @@ public class ScheduleController {
     public ResponseEntity<Map<String, Object>> getSchedule(@PathVariable Long scheduleId) {
         Schedule findSchedule = scheduleService.findById(scheduleId);
         Manager findManager = managerService.findById(findSchedule.getManager().getId());
-        findSchedule.setManager(findManager);
-
-        // response dto 생성
-        ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(findSchedule);
-        ManagerResponseDto managerResponseDto = new ManagerResponseDto(findManager);
 
         Map<String, Object> responseData = new HashMap<>();
-        responseData.put("schedule", scheduleResponseDto);
-        responseData.put("manager", managerResponseDto);
+        responseData.put("schedule", new ScheduleResponseDto(findSchedule));
+        responseData.put("manager", new ManagerResponseDto(findManager));
 
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
