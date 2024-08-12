@@ -6,6 +6,7 @@ import nbcamp.personalscheduler.entity.Schedule;
 import nbcamp.personalscheduler.exception.ApiException;
 import nbcamp.personalscheduler.exception.CommonErrorCode;
 import nbcamp.personalscheduler.repository.ScheduleRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,6 +19,7 @@ public class ScheduleService {
 
     private final ScheduleRepository repository;
     private final ManagerService managerService;
+    private final ModelMapper modelMapper;
 
     public Schedule save(Schedule schedule) {
         return repository.save(schedule);
