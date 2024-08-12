@@ -1,5 +1,6 @@
 package nbcamp.personalscheduler.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import nbcamp.personalscheduler.dto.ManagerResponseDto;
 import nbcamp.personalscheduler.dto.ScheduleRequestDto;
@@ -28,7 +29,7 @@ public class ScheduleController {
     private final ManagerService managerService;
 
     @PostMapping("/schedule")
-    public ResponseEntity<Map<String, Object>> createSchedule(@RequestBody ScheduleRequestDto requestDto) {
+    public ResponseEntity<Map<String, Object>> createSchedule(@Valid @RequestBody ScheduleRequestDto requestDto) {
         // dto -> entity
         Manager manager;
         if (requestDto.getEmail() != null) {
@@ -90,7 +91,8 @@ public class ScheduleController {
     }
 
     @PutMapping("/schedule/{scheduleId}")
-    public ResponseEntity<Map<String, Object>> updateSchedule(@PathVariable Long scheduleId, @RequestBody ScheduleRequestDto requestDto) {
+    public ResponseEntity<Map<String, Object>> updateSchedule(@PathVariable Long scheduleId,
+                                                              @Valid @RequestBody ScheduleRequestDto requestDto) {
         Schedule originSchedule = scheduleService.findById(scheduleId);
         Long managerId = originSchedule.getManager().getId();
 
