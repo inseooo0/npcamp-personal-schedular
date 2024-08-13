@@ -84,7 +84,7 @@ public class ScheduleRepository {
     }
 
     public Schedule update(Long scheduleId, Schedule schedule) {
-        String sql = "update schedule set content = ? where id = ?";
+        String sql = "update schedule set content = ?, update_at = CURRENT_TIMESTAMP where id = ?";
 
         jdbcTemplate.update(sql, schedule.getContent(), scheduleId);
         return findById(scheduleId);
