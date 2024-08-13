@@ -13,7 +13,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,17 +92,22 @@ public class ScheduleController {
         Schedule originSchedule = scheduleService.findById(scheduleId);
         Long managerId = originSchedule.getManager().getId();
 
-        Manager updateManager = new Manager(requestDto.getName());
-        updateManager.setId(managerId);
+        ManagerUpdateServiceDto managerDto = new ManagerUpdateServiceDto();
+        managerDto.setId(managerId);
+        managerDto.setName(requestDto.getName());
 
-        Schedule updateSchedule = new Schedule(requestDto.getContent(), updateManager, requestDto.getPassword());
-        Schedule result = scheduleService.update(scheduleId, updateSchedule);
-        Manager manager = managerService.update(updateManager);
-        result.setManager(manager);
+        ScheduleUpdateServiceDto scheduleDto = new ScheduleUpdateServiceDto();
+        scheduleDto.setId(scheduleId);
+        scheduleDto.setContent(requestDto.getContent());
+        scheduleDto.setPassword(requestDto.getPassword());
+
+        Schedule schedule = scheduleService.update(scheduleDto);
+        Manager manager = managerService.update(managerDto);
+        schedule.setManager(manager);
 
         // response dto 생성
         ManagerResponseDto managerResponseDto = modelMapper.map(manager, ManagerResponseDto.class);
-        ScheduleResponseDto scheduleResponseDto = modelMapper.map(result, ScheduleResponseDto.class);
+        ScheduleResponseDto scheduleResponseDto = modelMapper.map(schedule, ScheduleResponseDto.class);
         scheduleResponseDto.setManager(managerResponseDto);
 
         return scheduleResponseDto;

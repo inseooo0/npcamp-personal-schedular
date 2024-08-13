@@ -2,6 +2,7 @@ package nbcamp.personalscheduler.service;
 
 import lombok.RequiredArgsConstructor;
 import nbcamp.personalscheduler.dto.ScheduleCreateServiceDto;
+import nbcamp.personalscheduler.dto.ScheduleUpdateServiceDto;
 import nbcamp.personalscheduler.entity.Manager;
 import nbcamp.personalscheduler.entity.Schedule;
 import nbcamp.personalscheduler.exception.ApiException;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -46,16 +46,20 @@ public class ScheduleService {
         return scheduleList;
     }
 
-    public Schedule update(Long scheduleId, Schedule updateSchedule) {
-        Schedule schedule = findById(scheduleId);
+    public Schedule update(ScheduleUpdateServiceDto scheduleDto) {
+        Schedule schedule = findById(scheduleDto.getId());
 
+        // password 일치 여부 확인
         if (schedule == null) {
             throw new ApiException(CommonErrorCode.INVALID_PARAMETER);
-        } else if (!schedule.getPassword().equals(updateSchedule.getPassword())) {
+        } else if (!schedule.getPassword().equals(scheduleDto.getPassword())) {
             throw new ApiException(CommonErrorCode.INVALID_PARAMETER);
         }
 
-        return repository.update(scheduleId, updateSchedule);
+        Schedule updateSchedule = new Schedule();
+        updateSchedule.setId(scheduleDto.getId());
+        updateSchedule.setContent(scheduleDto.getContent());
+        return repository.update(schedule);
     }
 
     public void removeById(Long scheduleId, String password) {

@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import nbcamp.personalscheduler.entity.Manager;
 import nbcamp.personalscheduler.entity.Schedule;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -83,11 +82,11 @@ public class ScheduleRepository {
         }, queryArgs.toArray());
     }
 
-    public Schedule update(Long scheduleId, Schedule schedule) {
+    public Schedule update(Schedule schedule) {
         String sql = "update schedule set content = ?, update_at = CURRENT_TIMESTAMP where id = ?";
 
-        jdbcTemplate.update(sql, schedule.getContent(), scheduleId);
-        return findById(scheduleId);
+        jdbcTemplate.update(sql, schedule.getContent(), schedule.getId());
+        return findById(schedule.getId());
     }
 
     public void removeById(Long scheduleId) {

@@ -2,12 +2,11 @@ package nbcamp.personalscheduler.service;
 
 import lombok.RequiredArgsConstructor;
 import nbcamp.personalscheduler.dto.ManagerCreateServiceDto;
+import nbcamp.personalscheduler.dto.ManagerUpdateServiceDto;
 import nbcamp.personalscheduler.entity.Manager;
 import nbcamp.personalscheduler.repository.ManagerRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
-import java.lang.reflect.Member;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +29,8 @@ public class ManagerService {
         return repository.findById(id);
     }
 
-    public Manager update(Manager manager) {
+    public Manager update(ManagerUpdateServiceDto managerDto) {
+        Manager manager = modelMapper.map(managerDto, Manager.class);
         return repository.update(manager);
     }
 }
