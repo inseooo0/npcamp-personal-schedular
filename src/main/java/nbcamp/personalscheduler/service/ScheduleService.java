@@ -1,6 +1,7 @@
 package nbcamp.personalscheduler.service;
 
 import lombok.RequiredArgsConstructor;
+import nbcamp.personalscheduler.dto.ScheduleCreateServiceDto;
 import nbcamp.personalscheduler.entity.Manager;
 import nbcamp.personalscheduler.entity.Schedule;
 import nbcamp.personalscheduler.exception.ApiException;
@@ -21,7 +22,10 @@ public class ScheduleService {
     private final ManagerService managerService;
     private final ModelMapper modelMapper;
 
-    public Schedule save(Schedule schedule) {
+    public Schedule save(ScheduleCreateServiceDto scheduleDto) {
+        Manager manager = new Manager();
+        manager.setId(scheduleDto.getManagerId());
+        Schedule schedule = new Schedule(scheduleDto.getContent(), manager, scheduleDto.getPassword());
         return repository.save(schedule);
     }
 

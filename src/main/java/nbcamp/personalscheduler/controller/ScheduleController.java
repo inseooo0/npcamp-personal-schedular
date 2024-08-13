@@ -31,22 +31,14 @@ public class ScheduleController {
     @PostMapping("/schedule")
     @Operation(summary = "schedule 등록", description = "일정을 등록할 때 사용하는 API")
     public ScheduleResponseDto createSchedule(@Valid @RequestBody ScheduleCreateDto requestDto) {
-        // dto -> entity
-        Manager manager;
-        if (requestDto.getEmail() != null) {
-            manager = new Manager(requestDto.getName(), requestDto.getEmail());
-        } else {
-            manager = new Manager(requestDto.getName());
-        }
 
-        // manager db 저장
-        Manager savedManager = managerService.save(manager);
+        ManagerCreateServiceDto managerDto = modelMapper.map(requestDto, ManagerCreateServiceDto.class);
+        Manager savedManager = managerService.save(managerDto);
 
-        // schedule entity 생성
-        Schedule schedule = new Schedule(requestDto.getContent(), savedManager, requestDto.getPassword());
+        ScheduleCreateServiceDto scheduleDto = modelMapper.map(requestDto, ScheduleCreateServiceDto.class);
+        scheduleDto.setManagerId(savedManager.getId());
 
-        // schedule db 저장
-        Schedule savedSchedule = scheduleService.save(schedule);
+        Schedule savedSchedule = scheduleService.save(scheduleDto);
 
         // response dto 생성
         ManagerResponseDto managerResponseDto = modelMapper.map(savedManager, ManagerResponseDto.class);
