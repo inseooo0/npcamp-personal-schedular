@@ -52,7 +52,8 @@ public class ScheduleService {
         // password 일치 여부 확인
         if (schedule == null) {
             throw new ApiException(CommonErrorCode.INVALID_PARAMETER);
-        } else if (!schedule.getPassword().equals(scheduleDto.getPassword())) {
+        }
+        if (!schedule.getPassword().equals(scheduleDto.getPassword())) {
             throw new ApiException(CommonErrorCode.INVALID_PARAMETER);
         }
 
@@ -67,7 +68,8 @@ public class ScheduleService {
 
         if (schedule == null) {
             throw new ApiException(CommonErrorCode.INVALID_PARAMETER);
-        } else if (!schedule.getPassword().equals(password)) {
+        }
+        if (!schedule.getPassword().equals(password)) {
             throw new ApiException(CommonErrorCode.INVALID_PARAMETER);
         }
 
